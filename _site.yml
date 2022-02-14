@@ -1,0 +1,7 @@
+name: "ADMN 510"
+output_dir: docs
+navbar:
+  title: "R functions for 510"
+  left:
+    - text: "Home"
+      href: index.html

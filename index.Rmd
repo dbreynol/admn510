@@ -1,5 +1,5 @@
 ---
-title: ''
+title: 'Business Statistics: helpful R functions'
 output: html_document
 ---
 

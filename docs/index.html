@@ -301,24 +301,42 @@ $(document).ready(function () {
 </div>
 
 
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<div id="binomial-distribution" class="section level3">
+<h3>Binomial distribution</h3>
+<p><strong>Given</strong>: number of independent trials (<span class="math inline">\(k\)</span>), and a probability of success (<span class="math inline">\(p\)</span>) on each trial</p>
+<p>We typically want to know the probability that the number of successes (let’s refer to this as <span class="math inline">\(X\)</span>) is equal to some value, or range of values.</p>
+<p><strong>Example</strong>: In 10 flips of a biased coin where the probability of <em>Heads</em> is 0.6, what is the probability of obtaining less than or equal to 3 Heads.</p>
+<p><strong>Solution</strong>: We want: <span class="math inline">\(P(X=0) + P(X=1) + P(X=2)+ P(X=3)\)</span>. In the code chunk below, this is computed using a manual method and using an r formula: <code>dbinom</code>.</p>
+<pre class="r"><code># the arguments to dbinom are (x, number of trials, probability of success), where x 
+# you want to find the probability that X = x
+sum ( dbinom(0:3, 10, p = 0.7) ) # 0.01</code></pre>
+<pre><code>## [1] 0.01059208</code></pre>
+<pre class="r"><code># and manually using the binomial probability function
+choose(10,0) * 0.7 ^ 0 * (1-0.7)^10 + choose(10,1) * 0.7 ^ 1 * (1-0.7)^9 + choose(10,2) * 0.7 ^ 2 * (1-0.7)^8 + choose(10,3) * 0.7 ^ 3 * (1-0.7)^7</code></pre>
+<pre><code>## [1] 0.01059208</code></pre>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="index_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="normal-distribution" class="section level3">
+<h3>Normal distribution</h3>
+<p><strong>Given</strong>: the mean (<span class="math inline">\(\mu\)</span>) and standard deviation (<span class="math inline">\(\sigma\)</span>) of a random variable (<span class="math inline">\(X\)</span>) that follows a normal distribution</p>
+<p>We typically want to know the probability that <span class="math inline">\(X\)</span> is in some range. This is achieved with the <code>pnorm</code> function.</p>
+<p><strong>Example</strong>: The distribution of cat weights is normal with mean = 9 and standard deviation = 0.9. What is the probability that<span class="math inline">\(\ldots\)</span></p>
+<pre class="r"><code>pnorm(10, mean = 9, sd = 0.9) # P(X &lt; 10)</code></pre>
+<pre><code>## [1] 0.8667397</code></pre>
+<pre class="r"><code>pnorm(10, mean = 9, sd = 0.9) - pnorm(8, mean = 9, sd = 0.9) # P(8 &lt; X &lt; 10)</code></pre>
+<pre><code>## [1] 0.7334795</code></pre>
+<p>We may also be interested in finding a certain percentile of a distribution. This is achieved with the <code>qnorm</code> function.</p>
+<p>For example, what is the 80% percentile of the cat weight distribution?</p>
+<pre class="r"><code>qnorm(0.8, mean = 9, sd = 0.9) # 80th percentile of cat weights</code></pre>
+<pre><code>## [1] 9.757459</code></pre>
+</div>
+<div id="poisson-distribution" class="section level3">
+<h3>Poisson Distribution</h3>
+<p><strong>Given</strong>: The average rate of occurrence (<span class="math inline">\(\lambda\)</span>) for some event within a given time window</p>
+<p>We typically want to know the probability that some number of events occur within a unit of time. The probability function for the poisson distribution is used by the function <code>dpois</code>.</p>
+<p><strong>Example</strong>: On a certain island, there are 9 earthquakes on average that occur during the course of a year. What is the probability that more than 10 earthquakes are observed in a year?</p>
+<p><strong>Solution</strong>: Let’s refer to the count of earthquakes as <span class="math inline">\(X\)</span>. Then, the solution is to find: <span class="math inline">\(1 - P(X \leq 10)\)</span></p>
+<pre class="r"><code>1 - sum( dpois(0:10, lambda = 9) ) </code></pre>
+<pre><code>## [1] 0.2940117</code></pre>
 </div>
 
 

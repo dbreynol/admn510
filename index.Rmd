@@ -7,22 +7,71 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+### Binomial distribution
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+**Given**: number of independent trials ($k$), and a probability of success ($p$) on each trial
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+We typically want to know the probability that the number of successes (let's refer to this as $X$) is equal to some value, or range of values. 
 
-```{r cars}
-summary(cars)
+**Example**: In 10 flips of a biased coin where the probability of *Heads* is 0.6, what is the probability of obtaining less than or equal to 3 Heads.
+
+**Solution**: We want: $P(X=0) + P(X=1) + P(X=2)+ P(X=3)$. In the code chunk below, this is computed using a manual method and using an r formula: <code>dbinom</code>.
+
+```{r}
+
+# the arguments to dbinom are (x, number of trials, probability of success), where x 
+# you want to find the probability that X = x
+sum ( dbinom(0:3, 10, p = 0.7) ) # 0.01
+
+# and manually using the binomial probability function
+choose(10,0) * 0.7 ^ 0 * (1-0.7)^10 + choose(10,1) * 0.7 ^ 1 * (1-0.7)^9 + choose(10,2) * 0.7 ^ 2 * (1-0.7)^8 + choose(10,3) * 0.7 ^ 3 * (1-0.7)^7
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+### Normal distribution
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+**Given**: the mean ($\mu$) and standard deviation ($\sigma$) of a random variable ($X$) that follows a normal distribution
+
+We typically want to know the probability that $X$ is in some range. This is achieved with the <code>pnorm</code> function.
+
+**Example**: The distribution of cat weights is normal with mean = 9 and standard deviation = 0.9. What is the probability that$\ldots$
+
+```{r}
+
+pnorm(10, mean = 9, sd = 0.9) # P(X < 10)
+
+pnorm(10, mean = 9, sd = 0.9) - pnorm(8, mean = 9, sd = 0.9) # P(8 < X < 10)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+We may also be interested in finding a certain percentile of a distribution. This is achieved with the <code>qnorm</code> function. 
+
+For example, what is the 80% percentile of the cat weight distribution?
+
+```{r}
+qnorm(0.8, mean = 9, sd = 0.9) # 80th percentile of cat weights
+```
+
+### Poisson Distribution
+
+**Given**: The average rate of occurrence ($\lambda$) for some event within a given time window
+
+We typically want to know the probability that some number of events occur within a unit of time. The probability function for the poisson distribution is used by the function <code>dpois</code>.
+
+**Example**: On a certain island, there are 9 earthquakes on average that occur during the course of a year. What is the probability that more than 10 earthquakes are observed in a year?
+
+**Solution**: Let's refer to the count of earthquakes as $X$. Then, the solution is to find: $1 - P(X \leq 10)$
+
+```{r}
+1 - sum( dpois(0:10, lambda = 9) ) 
+```
+
+
+
+
+
+
+
+
+
